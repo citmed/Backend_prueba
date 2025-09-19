@@ -11,10 +11,13 @@ const agenda = new Agenda({
   db: { address: mongoConnectionString, collection: 'agendaJobs' },
 });
 
-// 🔹 Formatear fecha/hora 12h AM/PM
+// 🔹 Formatear fecha/hora 12h AM/PM en Colombia
 const formatFechaHora = (date) => {
-  const fecha = date.toLocaleDateString("es-CO");
+  const fecha = date.toLocaleDateString("es-CO", {
+    timeZone: "America/Bogota", // ✅ CORREGIDO
+  });
   const hora = date.toLocaleTimeString("es-CO", {
+    timeZone: "America/Bogota", // ✅ CORREGIDO
     hour: "2-digit",
     minute: "2-digit",
     hour12: true,
@@ -42,7 +45,7 @@ agenda.define("send-reminder", async (job) => {
     info?.email || (/\S+@\S+\.\S+/.test(user?.username) ? user.username : null);
   if (!email) return;
 
-  // ✅ Mostrar la hora REAL del evento (no la hora del recordatorio)
+  // ✅ Mostrar la hora REAL del evento (no la hora UTC)
   const { fecha, hora } = formatFechaHora(reminder.fecha);
 
   await sendReminderEmail(email, `⏰ Recordatorio de ${reminder.tipo}`, {
