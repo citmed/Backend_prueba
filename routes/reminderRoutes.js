@@ -7,7 +7,8 @@ const {
   actualizarRecordatorio,
   marcarRecordatorioCompletado,
   ejecutarRecordatoriosPendientes,
-  obtenerRecordatorioPorId
+  obtenerRecordatorioPorId,
+  marcarRecordatorioFavorito
 } = require('../controllers/reminderController');
 
 
@@ -30,6 +31,13 @@ router.delete('/:id', authMiddleware, eliminarRecordatorio);
 
 // ✅ Marcar recordatorio como completado o no
 router.put('/:id/completed', authMiddleware, marcarRecordatorioCompletado);
+
+//✅ Marcar recordatorio como favorito
+router.put("/:id/favorite", authMiddleware, marcarRecordatorioFavorito);
+
+// ✅ Obtener favoritos 
+router.get("/favoritos", authMiddleware, obtenerFavoritos);
+
 
 //✅ configuracion del cron cada minuto
 router.get("/cron/reminders", ejecutarRecordatoriosPendientes);
