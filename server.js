@@ -7,9 +7,6 @@ const registerUserRoutes = require('./routes/registerUserRoutes');
 const loginRoutes = require('./routes/loginRoutes');
 const adminRegistrationRoutes = require('./routes/adminRegistrationRoutes');
 const reminderRoutes = require('./routes/reminderRoutes'); 
-/*const { cargarRecordatorios } = require("./utils/scheduler");*/
-/*const { initAgenda } = require("./utils/agenda");*/
-
 
 dotenv.config();
 const app = express();
@@ -25,9 +22,15 @@ mongoose.connect(process.env.MONGODB_URI)
   })
   .catch(err => console.error('❌ MongoDB connection error:', err));
 
+// ✅ Ruta raíz personalizada
+app.get("/", (req, res) => {
+  res.send(`
+    <h1> Bienvenido al Backend Prueba de CitaMed</h1>
+    <p>La API está funcionando correctamente en Vercel.</p>
+  `);
+});
 
-
-// Rutas
+// ✅ Rutas principales
 app.use('/api/register', registerUserRoutes);
 app.use('/api/login', loginRoutes);
 app.use('/api/admin', adminRegistrationRoutes);
@@ -35,18 +38,15 @@ app.use('/api/reminders', reminderRoutes);
 app.use("/api/info-user", require("./routes/infoUserRoutes"));
 app.use("/api/auth", require("./routes/authRoutes"));
 
-
-
-
-// Ruta no encontrada
+// ✅ Ruta no encontrada (404)
 app.use((req, res, next) => {
-    res.status(404).json({ msg: 'Ruta no encontrada' });
+  res.status(404).send("<h2>❌ Ups, esta ruta no existe en la API de CitaMed</h2>");
 });
 
-// Manejador de errores
+// ✅ Manejador de errores
 app.use((err, req, res, next) => {
-    console.error(err.stack);
-    res.status(500).json({ msg: 'Error interno del servidor' });
+  console.error(err.stack);
+  res.status(500).send("<h2>⚠️ Error interno del servidor</h2>");
 });
 
 // Server
