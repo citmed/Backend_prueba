@@ -366,5 +366,6 @@ module.exports = {
   ejecutarRecordatoriosPendientes,
   obtenerRecordatorioPorId,
   marcarRecordatorioFavorito,
+  obtenerFavoritos,
 
 };
